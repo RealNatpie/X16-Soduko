@@ -25,6 +25,7 @@ const char TOPG[] = { S_BCOLOR,CH_ULCORNER,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,
                          CH_BTEE,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,
                          CH_BTEE,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,
                          CH_LRCORNER,CH_WHITE,0x00 };
+    const char VERNUM[] = "1.1";
 
 void splash();
 void initLookup();
@@ -36,10 +37,13 @@ void fillones();
 void showComp();
 void optOrder();
 int solve();
+void offsetCursor(int ox, int oy, int cidx);
 void __fastcall__ exit(int status);
 signed char __fastcall__ videomode(signed char Mode);
 unsigned char __fastcall__ cursor(unsigned char onoff);
 void __fastcall__ cbm_k_bsout(unsigned char C);
+void __fastcall__ gotoxy(unsigned char x, unsigned char y);
+void __fastcall__ cputc(char c);
 int getKeypress();
 int puzzle[81];
 int blanks[82];
@@ -51,55 +55,112 @@ int AddRow[81];
 int AddCel[81];
 int posBlanks[81][10];
 int slvOrder[81];
+int puzxLoc, puzyLoc;
 void main()
 {
-    long coplx;
-    int cl;
-    cbm_k_bsout(142);
-    videomode(1);
     clrscr();
     splash();
     initLookup();
-    printf("preare to enter puzzle.\n");
+    printf("Preare to enter puzzle.\n");
     inputPuz();
-    printf("checking complexity\n");
+    printf("Checking complexity.\n");
     findBlanks();
-    coplx = (long)blanks[0];
-    for (cl = 0; cl<9;cl++)
-    {
-        coplx *= 9L;
-    }
-    printf("unknowns: %d complexity: %lld\n", blanks[0], coplx);
-    printf("simplifying the puzlle solutions\n");
+    printf("Unknowns: %d\n", blanks[0]);
+    printf("Simplifying the puzlle solutions\n");
     simplify();
     if(blanks[0]==0)
     {
-        drawPuzzle(0);
+        drawPuzzle();
         exit(0);
     }
-    printf("optimizing solve order\n");
+    printf("Optimizing solve order.\n");
     optOrder();
-    printf("begining bruit force solver\n");
+    printf("Begining bruit force solver\n");
     if (solve() == 1)
     {
-        drawPuzzle(0);
+        drawPuzzle();
     }
     else
     {
-        printf("no soultion\n");
+        printf("No soultion\n");
     }
 }
 
 void splash()
 {
-    printf("soduko solver by nathanael nunes\n");
-    printf("V1.1 build march 29 2025\n");
+    printf("Soduko Solver by Nathanael Nunes\n");
+    printf("Build V%s %s\n", VERNUM, __DATE__);
 
 }
+
+void drawGrid(int sx, int sy)
+{
+    gotoxy(sx, sy);
+    printf("%s\n", TOPG);
+    printf("%s\n", MIDL);
+    printf("%s\n", MIDD);
+    printf("%s\n", MIDL);
+    printf("%s\n", MIDD);
+    printf("%s\n", MIDL);
+    printf("%s\n", DVDR);
+    printf("%s\n", MIDL);
+    printf("%s\n", MIDD);
+    printf("%s\n", MIDL);
+    printf("%s\n", MIDD);
+    printf("%s\n", MIDL);
+    printf("%s\n", DVDR);
+    printf("%s\n", MIDL);
+    printf("%s\n", MIDD);
+    printf("%s\n", MIDL);
+    printf("%s\n", MIDD);
+    printf("%s\n", MIDL);
+    printf("%s\n", BTM);
+}
+
+void refillPuzzle(int orx, int ory)
+{
+    int cx, cy;
+    int i;
+    cx = wherex();
+    cy = wherey();
+    for (i = 0; i < 81; i++)
+    {
+        offsetCursor(orx, ory, i);
+        if (puzzle[i] > 0 && puzzle[i] < 10)
+            cputc(puzzle[i] + 48);
+        else
+            cputc(' ');
+    }
+    gotoxy(cx, cy);
+}
+
+void offsetCursor(int ox, int oy, int cidx)
+{
+    gotoxy(ox + 1 + (AddCol[cidx] * 2), oy + 1 + (AddRow[cidx] * 2));
+   
+}
+void showFakeCursor()
+{
+    int tx, ty;
+    tx = wherex();
+    ty = wherey();
+    cputc(0xA6);
+    gotoxy(tx,ty);
+}
+void hideFakeCursor()
+{
+    int tx,ty;
+    tx = wherex();
+    ty= wherey();
+    printf(" ");
+    gotoxy(tx,ty);
+
+}
+
 void initLookup()
 {
     int i, idx, startRow, startCol, cellIndex;
-    printf("generateing lookup tables.\n");
+    printf("Generateing lookup tables.\n");
     for (i = 0; i < 81; i++)
     {
         AddCol[i] = i % 9;
@@ -138,20 +199,27 @@ void inputPuz()
 {
     char c;
     int i;
+   
+    //cursor(1);
+    printf("Please enter 1-9 or 0 for blank.  Backspace to erase.\n");
+    puzxLoc = wherex();
+    puzyLoc = wherey();
+    drawGrid(puzxLoc, puzyLoc);
+
+    //printf("*************************\n*");
     cursor(1);
-    printf("please enter 1-9 or 0 for blank.  backspace to undo.\n");
-    printf("*************************\n*");
     for (i = 0; i < 81;)
     {
 gcst:
+        offsetCursor(puzxLoc, puzyLoc, i);
+        //showFakeCursor();
         c = getKeypress();
+        refillPuzzle(puzxLoc, puzyLoc);
         if(c==10 && i > 0)
         {
             i--;
-            clrscr();
-            splash();
-            printf("please enter 1-9 or 0 for blank.  backspace to undo.\n");
-            drawPuzzle(i);
+            puzzle[i] = 0;
+            refillPuzzle(puzxLoc, puzyLoc);
             goto gcst;
         }
         if (testAdr(i, c) > 0 || c == 0)
@@ -159,66 +227,24 @@ gcst:
             puzzle[i++] = c;
             if (c > 0)
             {
-                printf(" %d", c);
+                cputc(c + 48);
             }
-            else
-            {
-                printf("  ");
-            }
-            if (AddCol[i] % 3 == 0)
-            {
-                printf(" *");
-            }
-            if (AddCol[i] == 0)
-            {
-                printf("\n*");
-                if (AddRow[i] % 3 == 0)
-                {
-                    printf("************************");
-                    printf("\n*");
-                }
-            }
+    
         }
     }
     cursor(0);
+    gotoxy(0, puzyLoc + 20);
 }
 
-void drawPuzzle(int noc)
+void drawPuzzle()
 
 {
-    int i;
-    if(noc < 1 || noc > 81)
-    {
-        noc = 81;
-    }
-    printf("*************************\n*");
-    for (i = 0; i < noc; i++)
-    {
-        if(puzzle[i]>0)
-        {
-            printf(" %d",puzzle[i]);
-        }
-        else
-        {
-            printf("  ");
-        }
-        if(AddCol[i+1] % 3 == 0)
-        {
-            printf(" *");
-        }
-        if(AddCol[i+1] == 0)
-        {
-            printf("\n*");
-            if(AddRow[i+1] % 3 == 0)
-            {
-                printf("************************\n");
-                if(i!=80)
-                {
-                    printf("*");
-                }
-            }
-        }
-    }
+    int cx, cy;
+    cx = wherex();
+    cy = wherey();
+    drawGrid(cx, cy);
+    refillPuzzle(cx, cy);
+    gotoxy(0, cy + 20);
 }
 int getKeypress()
 {
@@ -295,14 +321,8 @@ void fillones()
 }
 void showComp()
 {
-    int i;
-    long cpx;
-    cpx = 1L;
-    for (i = 0; i < blanks[0]; i++)
-    {
-        cpx *= (long)posBlanks[i][0];
-    }
-    printf("Unknowns: %d Complexity: %d\n", blanks[0], cpx);
+   
+    printf("Unknowns: %d\n", blanks[0]);
 }
 void optOrder()
 {
@@ -378,7 +398,8 @@ prlp:
     goto idxinc;
 slvd:
     sltst++;
-    printf("solution# %ld\n",sltst);
+    clrscr();
+    printf("Solution# %ld\n",sltst);
     return 1;
 fld:
     return 0;
