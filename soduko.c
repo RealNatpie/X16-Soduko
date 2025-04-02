@@ -44,6 +44,7 @@ unsigned char __fastcall__ cursor(unsigned char onoff);
 void __fastcall__ cbm_k_bsout(unsigned char C);
 void __fastcall__ gotoxy(unsigned char x, unsigned char y);
 void __fastcall__ cputc(char c);
+void __fastcall__ cbm_k_chrout(unsigned char C);
 int getKeypress();
 int puzzle[81];
 int blanks[82];
@@ -127,9 +128,11 @@ void refillPuzzle(int orx, int ory)
     {
         offsetCursor(orx, ory, i);
         if (puzzle[i] > 0 && puzzle[i] < 10)
-            cputc(puzzle[i] + 48);
+            cbm_k_chrout(puzzle[i] + 48);
+            //cputc(puzzle[i] + 48);
         else
-            cputc(' ');
+            cbm_k_chrout(0x20);
+            //cputc(' ');
     }
     gotoxy(cx, cy);
 }
@@ -227,7 +230,7 @@ gcst:
             puzzle[i++] = c;
             if (c > 0)
             {
-                cputc(c + 48);
+                cbm_k_chrout(c + 48);
             }
     
         }
