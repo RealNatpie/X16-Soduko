@@ -17,6 +17,6 @@ Bruit force solving soduko is trial on modern computers.   I set out do do it on
 The code was wirtten for the cc65 cross compiler.[Github Page](https://github.com/cc65/cc65)
 There is a make file but if you need to compile manualy you can use:
 
-    cl65 -o SODUKO.PRG -t cx16 soduko.c draw.c input.c solver.c
+    cl65 -o SUDOKU.PRG -t cx16 soduko.c draw.c input.c solver.c
 ![sample puzzle](https://github.com/RealNatpie/X16-Soduko/blob/main/images/sample.jpg?raw=true)
 Looking for a puzzle to solve.   Try this one.   Its one I've found that doesn't solve quite as quickly as other puzzles.
