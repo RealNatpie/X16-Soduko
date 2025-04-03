@@ -1,10 +1,13 @@
 #include "soduko.h"
+
+//Creats maps so the solver doesn't have to do all the math everytime
 void initLookup()
 {
     int i, idx, startRow, startCol, cellIndex;
     printf("Generateing lookup tables.\n");
     for (i = 0; i < 81; i++)
     {
+        //Address to Colum Row and Cell Maps
         AddCol[i] = i % 9;
         AddRow[i] = i / 9;
         AddCel[i] = AddCol[i] / 3 + (AddRow[i] / 3) * 3;
@@ -14,6 +17,7 @@ void initLookup()
     {
         for (idx = 0; idx < 9; idx++)
         {
+            //Colum Row and Cell maps back to address.
             colAdds[i][idx] = i + idx * 9;
             rowAdds[i][idx] = i * 9 + idx;
             startRow = (i / 3) * 3;
@@ -23,6 +27,7 @@ void initLookup()
         }
     }
 }
+//The basic test performed by the solver.   Can value v be plased in address ad
 int testAdr(int ad, int v)
 {
     int i;
@@ -38,9 +43,7 @@ int testAdr(int ad, int v)
     return 1;
 }
 
-
-
-
+//Identify addresses that need a solution
 void findBlanks()
 {
     int i;
@@ -54,6 +57,8 @@ void findBlanks()
         }
     }
 }
+
+//Find the possible values that can be pluged into each cell and identify any that only have one option
 void simplify()
 {
     int i, vals;
@@ -87,6 +92,7 @@ stlp:
         goto stlp;
     }
 }
+//For blanks with only one possble answer plug that answer into the puzzle.
 void fillones()
 {
     int i;
@@ -98,11 +104,19 @@ void fillones()
         }
     }
 }
+//This is meant to show how well the simply function has worked but due to float
+//suport not being implemented in cc65 currently this function was reduced to just showing
+//the count of blank spaces
 void showComp()
 {
 
     printf("Unknowns: %d\n", blanks[0]);
 }
+
+
+/// <summary>
+/// Sort the blanks from fewiest options to most options
+/// </summary>
 void optOrder()
 {
     int idx, val, opnt;
@@ -118,6 +132,10 @@ void optOrder()
         }
     }
 }
+/// <summary>
+/// Brute Force solver, with MVR optimization
+/// </summary>
+/// <returns>1 if solution found 0 if no solution found.</returns>
 int solve()
 {
     int sidx, cadd, endidx, idxPnt;
