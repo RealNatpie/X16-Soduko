@@ -1,4 +1,4 @@
-SOURCES = soduko.c
+SOURCES = soduko.c draw.c input.c solver.c
 
 PROGRAM = SODUKO.PRG
 
