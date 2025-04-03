@@ -1,4 +1,4 @@
-#include "soduko.h"
+#include "sudoku.h"
 
 //Creats maps so the solver doesn't have to do all the math everytime
 void initLookup()
@@ -196,7 +196,7 @@ prlp:
 slvd:
     sltst++;
     clrscr();
-    printf("Solution# %ld\n", sltst);
+    printf("Solution #%ld\n", sltst);
     return 1;
 fld:
     return 0;

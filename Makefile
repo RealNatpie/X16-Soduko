@@ -1,6 +1,6 @@
-SOURCES = soduko.c draw.c input.c solver.c
+SOURCES = sudoku.c draw.c input.c solver.c
 
-PROGRAM = SODUKO.PRG
+PROGRAM = SUDOKU.PRG
 
 CC65_TARGET = cx16
 

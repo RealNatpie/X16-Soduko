@@ -1,4 +1,4 @@
-#include "soduko.h"
+#include "sudoku.h"
 void inputPuz()
 {
     char c;

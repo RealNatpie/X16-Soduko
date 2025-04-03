@@ -1,4 +1,4 @@
-#include "soduko.h"
+#include "sudoku.h"
 
 const char TOPG[] = { S_BCOLOR,CH_ULCORNER,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,
     CH_HLINE,CH_TTEE,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,CH_TTEE,
@@ -19,14 +19,14 @@ const char BTM[] = { S_BCOLOR,CH_LLCORNER,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,CH
                      CH_BTEE,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,
                      CH_BTEE,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,
                      CH_LRCORNER,CH_WHITE,0x00 };
-const char VERNUM[] = "1.1";
+const char VERNUM[] = "1.1a";
 
 /// <summary>
 /// Splash screen.   Maybe replace with something fancy someday
 /// </summary>
 void splash()
 {
-    printf("Soduko Solver by Nathanael Nunes\n");
+    printf("Sudoku Solver by Nathanael Nunes\n");
     printf("Build V%s %s\n", VERNUM, __DATE__);
 
 }
