@@ -17,4 +17,4 @@ Bruit force solving soduko is trial on modern computers.   I set out do do it on
 The code was wirtten for the cc65 cross compiler.[Github Page](https://github.com/cc65/cc65)
 There is a make file but if you need to compile manualy you can use:
 
-    lc65 -o SODUKO.PRG -t cx16 soduko.c draw.c input.c solver.c
+    cl65 -o SODUKO.PRG -t cx16 soduko.c draw.c input.c solver.c
