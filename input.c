@@ -3,7 +3,8 @@ void inputPuz()
 {
     char c;
     int i;
-    printf("Please enter 1-9 or 0 for blank.  Backspace to erase.\n");
+    printf("Please enter 1-9 or 0 for blank.  Youse Arrows and Backspace to Navigate\n");
+    printf("Press enter to begin solving.");
     puzxLoc = wherex();
     puzyLoc = wherey();
     drawGrid(puzxLoc, puzyLoc);

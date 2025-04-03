@@ -21,6 +21,9 @@ const char BTM[] = { S_BCOLOR,CH_LLCORNER,CH_HLINE,CH_HLINE,CH_HLINE,CH_HLINE,CH
                      CH_LRCORNER,CH_WHITE,0x00 };
 const char VERNUM[] = "1.1";
 
+/// <summary>
+/// Splash screen.   Maybe replace with something fancy someday
+/// </summary>
 void splash()
 {
     printf("Soduko Solver by Nathanael Nunes\n");
@@ -28,6 +31,12 @@ void splash()
 
 }
 
+/// <summary>
+/// Draws a grid and an XY location.
+/// Current implementation only supports drawing on the right edge
+/// </summary>
+/// <param name="sx">x origin for puzzle</param>
+/// <param name="sy">y origin for puzzle</param>
 void drawGrid(int sx, int sy)
 {
     gotoxy(sx, sy);
@@ -51,6 +60,13 @@ void drawGrid(int sx, int sy)
     printf("%s\n", MIDL);
     printf("%s\n", BTM);
 }
+
+/// <summary>
+/// Rrequires puzzle to alrady have been drawn.   This will populate the the
+/// gridd with the included origin with the current puzzle stored in puzzle[]
+/// </summary>
+/// <param name="orx">Grid X origin</param>
+/// <param name="ory">Grid Y origin</param>
 void refillPuzzle(int orx, int ory)
 {
     int cx, cy;
@@ -68,11 +84,21 @@ void refillPuzzle(int orx, int ory)
     gotoxy(cx, cy);
 }
 
+/// <summary>
+/// Calculats and moves currsor to puzzle index location
+/// </summary>
+/// <param name="ox">Puzzle Grid X origin</param>
+/// <param name="oy">Puzzle Grid y origin</param>
+/// <param name="cidx">puzzle index address</param>
 void offsetCursor(int ox, int oy, int cidx)
 {
     gotoxy(ox + 1 + (AddCol[cidx] * 2), oy + 1 + (AddRow[cidx] * 2));
 
 }
+
+/// <summary>
+/// Draws puzzle grid at current locations and populates values.
+/// </summary>
 void drawPuzzle()
 
 {

@@ -17,10 +17,11 @@ clock_t cursorTickTime;
 void main()
 {
     cursorTickTime = CLOCKS_PER_SEC / 4;  //Sets timing for cursor blinking.  
+    
     clrscr();
     splash();
     initLookup();
-    printf("Preare to enter puzzle.\n");
+    
     inputPuz();
     printf("Checking complexity.\n");
     findBlanks();
@@ -32,9 +33,11 @@ void main()
         drawPuzzle();
         exit(0);
     }
+    
     printf("Optimizing solve order.\n");
     optOrder();
     printf("Begining bruit force solver\n");
+    
     if (solve() == 1)
     {
         drawPuzzle();
