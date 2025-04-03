@@ -1,4 +1,4 @@
-# Soduko Puzzle Solver
+# Sudoku Puzzle Solver
 
 I recently built a reproduction kit Altair 8800, after years of wanting one and constantly being reminded  I could never afford one.   It gave me a new appreciation for what it was probably like getting a machine like that into the hands of the people.
 The thing that struck me the most was just how powerful a tool it would have been to have one of these machines with a basic interpreter.  And I set of to find problems that a new computer in 1975 could have helped with.
